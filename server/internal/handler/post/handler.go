@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github/Prokopevs/GoLaniakea/internal/services/post"
 	
 )
 
@@ -17,18 +18,18 @@ func NewHandler(s PostService) *Handler {
 	}
 }
 
-func (h *Handler) CreateUser(c *gin.Context) {
-	// var u CreateUserReq
-	// if err := c.ShouldBindJSON(&u); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
+func (h *Handler) CreatePost(c *gin.Context) {
+	var u services.CreatePostReq
+	if err := c.ShouldBindJSON(&u); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	// res, err := h.Service.CreateUser(c.Request.Context(), &u)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	res, err := h.service.CreatePost(c.Request.Context(), &u)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-	// c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, res)
 }

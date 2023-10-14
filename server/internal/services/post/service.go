@@ -10,7 +10,7 @@ type service struct {
 	timeout time.Duration
 }
 
-func NewServices(repo PostRepo) *service {
+func NewService(repo PostRepo) *service {
 	return &service{
 		repo,
 		time.Duration(2) * time.Second,
