@@ -5,19 +5,19 @@ import (
 	"time"
 )
 
-type service struct {
+type serv struct {
 	repo PostRepo
 	timeout time.Duration
 }
 
-func NewService(repo PostRepo) *service {
-	return &service{
+func NewService(repo PostRepo) *serv {
+	return &serv{
 		repo,
 		time.Duration(2) * time.Second,
 	}
 }
 
-func (s *service) CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes, error) {
+func (s *serv) CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 

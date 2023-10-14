@@ -5,11 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github/Prokopevs/GoLaniakea/internal/services/post"
-	
 )
 
 type Handler struct {
-	service PostService 
+	serv PostService 
 }
 
 func NewHandler(s PostService) *Handler {
@@ -25,7 +24,7 @@ func (h *Handler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	res, err := h.service.CreatePost(c.Request.Context(), &u)
+	res, err := h.serv.CreatePost(c.Request.Context(), &u)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
