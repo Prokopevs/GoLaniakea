@@ -3,17 +3,18 @@ package handler
 import (
 	"net/http"
 
+	services "github/Prokopevs/GoLaniakea/internal/services/post"
+
 	"github.com/gin-gonic/gin"
-	"github/Prokopevs/GoLaniakea/internal/services/post"
 )
 
 type Handler struct {
-	serv PostService 
+	serv PostService
 }
 
 func NewHandler(s PostService) *Handler {
 	return &Handler{
-		s,
+		serv: s,
 	}
 }
 

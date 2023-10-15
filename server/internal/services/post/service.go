@@ -12,8 +12,8 @@ type serv struct {
 
 func NewService(repo PostRepo) *serv {
 	return &serv{
-		repo,
-		time.Duration(2) * time.Second,
+		repo: repo,
+		timeout: 2 * time.Second,
 	}
 }
 

@@ -22,12 +22,12 @@ func NewPostRepository(db *sql.DB) *PostRepo {
 func (r *PostRepo) CreatePost(ctx context.Context, post *model.Post) (*model.Post, error) {
 	fmt.Println(post.Name)
 	var lastInsertId int
-	query := `INSERT INTO posts(imageUrl, name, description, date, category, categoryName, likeCount, liked, text) VALUES 
+	const query = `INSERT INTO posts(imageUrl, name, description, date, category, categoryName, likeCount, liked, text) VALUES 
 	($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id`
 	err := r.db.QueryRowContext(ctx, query, post.ImageUrl, post.Name, post.Description, post.Date, post.Category, post.CategoryName, 
 		post.LikeCount, post.Liked, post.Text).Scan(&lastInsertId)
 	if err != nil {
-		return &model.Post{}, err
+		return nil, err
 	}
 
 	post.ID = int64(lastInsertId)

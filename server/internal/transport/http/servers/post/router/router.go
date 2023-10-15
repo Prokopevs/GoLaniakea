@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github/Prokopevs/GoLaniakea/internal/handler/post"
+	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
 	"time"
 
 	"github.com/gin-contrib/cors"

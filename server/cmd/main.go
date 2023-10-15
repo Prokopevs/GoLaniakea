@@ -2,10 +2,10 @@ package main
 
 import (
 	"github/Prokopevs/GoLaniakea/db"
-	"github/Prokopevs/GoLaniakea/internal/handler/post"
 	"github/Prokopevs/GoLaniakea/internal/repository/post"
-	"github/Prokopevs/GoLaniakea/internal/router"
 	"github/Prokopevs/GoLaniakea/internal/services/post"
+	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
+	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/router"
 	"log"
 )
 

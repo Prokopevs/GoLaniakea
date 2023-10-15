@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"github/Prokopevs/GoLaniakea/internal/services/post"
+	services "github/Prokopevs/GoLaniakea/internal/services/post"
 )
 
 type PostService interface {
