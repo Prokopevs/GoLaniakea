@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"github/Prokopevs/GoLaniakea/internal/model"
 )
 
@@ -34,17 +35,14 @@ func (r *PostRepo) CreatePost(ctx context.Context, post *model.Post) (*model.Pos
 func (r *PostRepo) GetPosts(page string, limit string) ([]*model.Post, error) {
 	var posts []*model.Post
 
-	var query string
-	var rows *sql.Rows
-	var err error
 	if page == "" || limit == "" {
-		query = "SELECT * FROM posts"
-		rows, err = r.db.Query(query)
-	} else {
-		query = "SELECT * FROM posts OFFSET $1 LIMIT $2"
-		rows, err = r.db.Query(query, page, limit)
-	}
+		page = "1"
+		limit = "3"
+	} 
 
+	const query = "SELECT * FROM posts OFFSET $1 LIMIT $2"
+	rows, err := r.db.Query(query, page, limit)
+	
 	if err != nil {
 		return nil, err
 	}
@@ -63,4 +61,17 @@ func (r *PostRepo) GetPosts(page string, limit string) ([]*model.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func (r *PostRepo) GetPostById(ctx context.Context, id string) (*model.Post, error) {
+	var p model.Post
+	const query = "SELECT * FROM posts WHERE id = $1"
+
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&p.ID, &p.ImageUrl, &p.Name, &p.Description, &p.Date, &p.Category, &p.CategoryName, &p.LikeCount, &p.Liked, &p.Text)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(p)
+
+	return &p, nil
 }

@@ -27,7 +27,7 @@ func InitRouter(postHandler *handler.Handler) {
 
 	r.POST("/create", postHandler.CreatePost)
 	r.GET("/posts", postHandler.GetPosts)
-	// r.POST("/login", postHandler.Login)
+	r.GET("/post/:id", postHandler.GetPostById)
 	
 }
 

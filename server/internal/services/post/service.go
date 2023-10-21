@@ -44,3 +44,12 @@ func (s *serv) GetPosts(page string, limit string) ([]*model.Post, error) {
 
 	return r, nil
 }
+
+func (s *serv) GetPostById(c context.Context, id string) (*model.Post, error) {
+	r, err := s.repo.GetPostById(c, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}

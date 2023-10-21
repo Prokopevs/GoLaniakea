@@ -8,6 +8,7 @@ import (
 type PostService interface {
 	CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes, error)
 	GetPosts(page string, limit string) ([]*model.Post, error)
+	GetPostById(c context.Context, id string) (*model.Post, error)
 }
 
 type CreatePostReq struct {
