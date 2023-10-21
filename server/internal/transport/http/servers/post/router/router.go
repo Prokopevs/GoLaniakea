@@ -26,8 +26,9 @@ func InitRouter(postHandler *handler.Handler) {
 	}))
 
 	r.POST("/create", postHandler.CreatePost)
+	r.GET("/posts", postHandler.GetPosts)
 	// r.POST("/login", postHandler.Login)
-	// r.GET("/logout", postHandler.Logout)
+	
 }
 
 func Start(addr string) error {

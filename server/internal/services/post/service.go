@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"github/Prokopevs/GoLaniakea/internal/model"
+	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
 	"time"
 )
 
@@ -17,7 +19,7 @@ func NewService(repo PostRepo) *serv {
 	}
 }
 
-func (s *serv) CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes, error) {
+func (s *serv) CreatePost(c context.Context, req *handler.CreatePostReq) (*handler.CreatePostRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -27,9 +29,18 @@ func (s *serv) CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes
 		return nil, err
 	}
 
-	res := &CreatePostRes{
+	res := &handler.CreatePostRes{
 		ID: r.ID,
 	}
 
 	return res, nil
+}
+
+func (s *serv) GetPosts(page string, limit string) ([]*model.Post, error) {
+	r, err := s.repo.GetPosts(page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
 }
