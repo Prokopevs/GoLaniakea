@@ -25,10 +25,10 @@ func InitRouter(postHandler *handler.Handler) {
 		MaxAge: 12 * time.Hour,
 	}))
 
-	r.POST("/create", postHandler.CreatePost)
+	r.POST("/post/create", postHandler.CreatePost)
 	r.GET("/posts", postHandler.GetPosts)
 	r.GET("/post/:id", postHandler.GetPostById)
-	
+	r.DELETE("/post/delete/:id", postHandler.DeletePostById)
 }
 
 func Start(addr string) error {

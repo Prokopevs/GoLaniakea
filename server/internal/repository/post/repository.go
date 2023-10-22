@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github/Prokopevs/GoLaniakea/internal/model"
 )
 
@@ -32,17 +31,25 @@ func (r *PostRepo) CreatePost(ctx context.Context, post *model.Post) (*model.Pos
 	return post, nil
 }
 
-func (r *PostRepo) GetPosts(page string, limit string) ([]*model.Post, error) {
+func (r *PostRepo) GetPosts(category, page, limit string) ([]*model.Post, error) {
 	var posts []*model.Post
 
+	var query string
+	var rows *sql.Rows
+	var err error
 	if page == "" || limit == "" {
-		page = "1"
+		page = "0"
 		limit = "3"
-	} 
+	}
 
-	const query = "SELECT * FROM posts OFFSET $1 LIMIT $2"
-	rows, err := r.db.Query(query, page, limit)
-	
+	if category == "" {
+		query = "SELECT * FROM posts OFFSET $1 LIMIT $2"
+		rows, err = r.db.Query(query, page, limit)
+	} else {
+		query = "SELECT * FROM posts WHERE category = $1 OFFSET $2 LIMIT $3"
+		rows, err = r.db.Query(query, category, page, limit)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +78,18 @@ func (r *PostRepo) GetPostById(ctx context.Context, id string) (*model.Post, err
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(p)
 
 	return &p, nil
+}
+
+func (r *PostRepo) DeletePostById(ctx context.Context, id string) (*string, error) {
+	var idFromDB string
+	const query = "DELETE FROM posts WHERE id = $1 returning id"
+
+	err := r.db.QueryRowContext(ctx, query, id).Scan(&idFromDB)
+	if err != nil {
+		return nil, err
+	}
+
+	return &idFromDB, nil
 }

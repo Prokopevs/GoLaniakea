@@ -7,8 +7,9 @@ import (
 
 type PostRepo interface {
 	CreatePost(ctx context.Context, post *model.Post) (*model.Post, error)
-	GetPosts(page string, limit string) ([]*model.Post, error)
+	GetPosts(category, page, limit string) ([]*model.Post, error)
 	GetPostById(ctx context.Context, id string) (*model.Post, error)
+	DeletePostById(ctx context.Context, id string) (*string, error)
 }
 
 func NewPost(imageUrl, name, description, date string, category int64, categoryName string, likeCount int64, liked bool, text string) *model.Post {

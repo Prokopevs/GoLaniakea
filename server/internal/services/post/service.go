@@ -8,13 +8,13 @@ import (
 )
 
 type serv struct {
-	repo PostRepo
+	repo    PostRepo
 	timeout time.Duration
 }
 
 func NewService(repo PostRepo) *serv {
 	return &serv{
-		repo: repo,
+		repo:    repo,
 		timeout: 2 * time.Second,
 	}
 }
@@ -22,7 +22,7 @@ func NewService(repo PostRepo) *serv {
 func (s *serv) CreatePost(c context.Context, req *handler.CreatePostReq) (*handler.CreatePostRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
-
+	
 	p := NewPost(req.ImageUrl, req.Name, req.Description, req.Date, req.Category, req.CategoryName, req.LikeCount, req.Liked, req.Text)
 	r, err := s.repo.CreatePost(ctx, p)
 	if err != nil {
@@ -36,8 +36,8 @@ func (s *serv) CreatePost(c context.Context, req *handler.CreatePostReq) (*handl
 	return res, nil
 }
 
-func (s *serv) GetPosts(page string, limit string) ([]*model.Post, error) {
-	r, err := s.repo.GetPosts(page, limit)
+func (s *serv) GetPosts(category, page, limit string) ([]*model.Post, error) {
+	r, err := s.repo.GetPosts(category, page, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +47,15 @@ func (s *serv) GetPosts(page string, limit string) ([]*model.Post, error) {
 
 func (s *serv) GetPostById(c context.Context, id string) (*model.Post, error) {
 	r, err := s.repo.GetPostById(c, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func (s *serv) DeletePostById(c context.Context, id string) (*string, error) {
+	r, err := s.repo.DeletePostById(c, id)
 	if err != nil {
 		return nil, err
 	}
