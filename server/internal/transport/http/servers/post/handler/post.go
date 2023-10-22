@@ -7,9 +7,10 @@ import (
 
 type PostService interface {
 	CreatePost(c context.Context, req *CreatePostReq) (*CreatePostRes, error)
-	GetPosts(category, page, limit string) ([]*model.Post, error)
+	GetPosts(category, page, limit string) ([]*model.Post, string, error)
 	GetPostById(c context.Context, id string) (*model.Post, error)
 	DeletePostById(ctx context.Context, id string) (*string, error)
+	UpdatePost(c context.Context, req *model.Post) (*string, error)
 }
 
 type CreatePostReq struct {
@@ -26,4 +27,9 @@ type CreatePostReq struct {
 
 type CreatePostRes struct {
 	ID int64 `json:"id" db:"id"`
+}
+
+type PostsResponse struct {
+	Posts []*model.Post `json:"posts"`
+	Total string `json:"total"`
 }

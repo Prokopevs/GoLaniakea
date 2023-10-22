@@ -29,6 +29,7 @@ func InitRouter(postHandler *handler.Handler) {
 	r.GET("/posts", postHandler.GetPosts)
 	r.GET("/post/:id", postHandler.GetPostById)
 	r.DELETE("/post/delete/:id", postHandler.DeletePostById)
+	r.PATCH("/post/update", postHandler.UpdatePost)
 }
 
 func Start(addr string) error {

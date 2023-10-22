@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"database/sql"
+	"database/sql"                                       
 	"github/Prokopevs/GoLaniakea/internal/model"
 )
 
@@ -31,11 +31,14 @@ func (r *PostRepo) CreatePost(ctx context.Context, post *model.Post) (*model.Pos
 	return post, nil
 }
 
-func (r *PostRepo) GetPosts(category, page, limit string) ([]*model.Post, error) {
+func (r *PostRepo) GetPosts(category, page, limit string) ([]*model.Post, string, error) {
 	var posts []*model.Post
 
 	var query string
+	var totalCountQuery string
 	var rows *sql.Rows
+	var total string
+
 	var err error
 	if page == "" || limit == "" {
 		page = "0"
@@ -43,15 +46,25 @@ func (r *PostRepo) GetPosts(category, page, limit string) ([]*model.Post, error)
 	}
 
 	if category == "" {
-		query = "SELECT * FROM posts OFFSET $1 LIMIT $2"
+		query = "SELECT * FROM posts ORDER BY id ASC OFFSET $1 LIMIT $2"
+		totalCountQuery = "SELECT COUNT(*) FROM posts"
 		rows, err = r.db.Query(query, page, limit)
+		error := r.db.QueryRow(totalCountQuery).Scan(&total)
+		if error != nil {
+			return nil, "0", err
+		}
 	} else {
-		query = "SELECT * FROM posts WHERE category = $1 OFFSET $2 LIMIT $3"
+		query = "SELECT * FROM posts WHERE category = $1 ORDER BY id ASC OFFSET $2 LIMIT $3"
+		totalCountQuery = "SELECT COUNT(*) FROM posts WHERE category = $1"
 		rows, err = r.db.Query(query, category, page, limit)
+		error := r.db.QueryRow(totalCountQuery, category).Scan(&total)
+		if error != nil {
+			return nil, "0", err
+		}
 	}
 
 	if err != nil {
-		return nil, err
+		return nil, "0", err
 	}
 
 	defer rows.Close()
@@ -61,13 +74,13 @@ func (r *PostRepo) GetPosts(category, page, limit string) ([]*model.Post, error)
 
 		err = rows.Scan(&p.ID, &p.ImageUrl, &p.Name, &p.Description, &p.Date, &p.Category, &p.CategoryName, &p.LikeCount, &p.Liked, &p.Text)
 		if err != nil {
-			return nil, err
+			return nil, "0", err
 		}
 
 		posts = append(posts, &p)
 	}
 
-	return posts, nil
+	return posts, total, nil
 }
 
 func (r *PostRepo) GetPostById(ctx context.Context, id string) (*model.Post, error) {
@@ -92,4 +105,17 @@ func (r *PostRepo) DeletePostById(ctx context.Context, id string) (*string, erro
 	}
 
 	return &idFromDB, nil
+}
+
+func (r *PostRepo) UpdatePost(ctx context.Context, post *model.Post) (*string, error) {
+	var id string
+	const query = `UPDATE posts SET imageUrl=$1, name=$2, description=$3, date=$4, category=$5, categoryName=$6, likeCount=$7,
+	liked=$8, text=$9 WHERE id = $10 RETURNING id`
+	err := r.db.QueryRowContext(ctx, query, post.ImageUrl, post.Name, post.Description, post.Date, post.Category, post.CategoryName,
+		post.LikeCount, post.Liked, post.Text, post.ID).Scan(&id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &id, nil
 }

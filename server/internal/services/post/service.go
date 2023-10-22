@@ -36,13 +36,13 @@ func (s *serv) CreatePost(c context.Context, req *handler.CreatePostReq) (*handl
 	return res, nil
 }
 
-func (s *serv) GetPosts(category, page, limit string) ([]*model.Post, error) {
-	r, err := s.repo.GetPosts(category, page, limit)
+func (s *serv) GetPosts(category, page, limit string) ([]*model.Post, string, error) {
+	r, t, err := s.repo.GetPosts(category, page, limit)
 	if err != nil {
-		return nil, err
+		return nil, "0", err
 	}
 
-	return r, nil
+	return r, t, nil
 }
 
 func (s *serv) GetPostById(c context.Context, id string) (*model.Post, error) {
@@ -56,6 +56,15 @@ func (s *serv) GetPostById(c context.Context, id string) (*model.Post, error) {
 
 func (s *serv) DeletePostById(c context.Context, id string) (*string, error) {
 	r, err := s.repo.DeletePostById(c, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func (s *serv) UpdatePost(c context.Context, post *model.Post) (*string, error) {
+	r, err := s.repo.UpdatePost(c, post)
 	if err != nil {
 		return nil, err
 	}
