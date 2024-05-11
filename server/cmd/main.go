@@ -1,21 +1,43 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"github/Prokopevs/GoLaniakea/db"
 	"github/Prokopevs/GoLaniakea/internal/repository/post"
 	"github/Prokopevs/GoLaniakea/internal/services/post"
 	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
 	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/router"
-	"log"
+	"os"
 )
 
-func main() {
-	dbConn, err := db.NewDatabase()
+const (
+	exitCodeInitError = 2
+)
+
+func run() error {
+	cfg, err := loadEnvConfig()
 	if err != nil {
-		log.Fatalf("could not initialize database connection: %s", err)
+		return err
+	}
+
+	dbConn, err := db.NewDatabase(context.Background(), cfg.pgConnString)
+	if err != nil {
+		return err
 	}
 
 	postRep := repository.NewPostRepository(dbConn.GetDB())
+}
+
+func main() {
+	err := run()
+	if err != nil {
+		fmt.Fprint(os.Stderr, err.Error())
+		os.Exit(exitCodeInitError)
+	}
+	
+
+	
 	postSvc := services.NewService(postRep)
 	postHandler := handler.NewHandler(postSvc)
 

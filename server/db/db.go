@@ -1,44 +1,24 @@
 package db
 
 import (
-	"database/sql"
-	"os"
-	"log"
+	"context"
 
-	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/jackc/pgx/stdlib"
 )
 
-type Database struct {
-	db *sql.DB
+type database struct {
+	db *sqlx.DB
 }
 
-func NewDatabase() (*Database, error) {
-	// load .env file
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
 
-	// Open the connection
-	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
+func NewDatabase(ctx context.Context, addr string) (*database, error) {
+	d, err := sqlx.ConnectContext(ctx, "pgx", addr)
 	if err != nil {
 		return nil, err
 	}
 
-	// check the connection
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	return &Database{db: db}, nil
-}
-
-func (d *Database) Close() {
-	d.db.Close()
-}
-
-func (d *Database) GetDB() *sql.DB {
-	return d.db
+	return &database{
+		db: d,
+	}, nil
 }
