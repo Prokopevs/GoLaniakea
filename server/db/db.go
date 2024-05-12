@@ -3,14 +3,13 @@ package db
 import (
 	"context"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/jackc/pgx/stdlib"
+	"github.com/jmoiron/sqlx"
 )
 
 type database struct {
 	db *sqlx.DB
 }
-
 
 func NewDatabase(ctx context.Context, addr string) (*database, error) {
 	d, err := sqlx.ConnectContext(ctx, "pgx", addr)

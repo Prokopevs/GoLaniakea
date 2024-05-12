@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github/Prokopevs/GoLaniakea/db"
-	"github/Prokopevs/GoLaniakea/internal/repository/post"
-	"github/Prokopevs/GoLaniakea/internal/services/post"
+	"github/Prokopevs/GoLaniakea/internal/service"
 	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
 	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/router"
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+
+	"go.uber.org/zap"
 )
 
 const (
@@ -26,7 +30,29 @@ func run() error {
 		return err
 	}
 
-	postRep := repository.NewPostRepository(dbConn.GetDB())
+	postSvc := service.NewServiceImpl(dbConn)
+
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+	sugaredLogger := logger.Sugar()
+
+	httpServer := handler.NewHTTP(cfg.httpAddr, sugaredLogger, postSvc)
+
+	ctx, cancel := context.WithCancel(context.Background())
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	go func(ctx context.Context) {
+		httpServer.Run(ctx)
+		wg.Done()
+	}(ctx)
+
+	termChan := make(chan os.Signal, 1)
+	signal.Notify(termChan, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	<-termChan
+	cancel()
+
+	return nil
 }
 
 func main() {
@@ -35,13 +61,4 @@ func main() {
 		fmt.Fprint(os.Stderr, err.Error())
 		os.Exit(exitCodeInitError)
 	}
-	
-
-	
-	postSvc := services.NewService(postRep)
-	postHandler := handler.NewHandler(postSvc)
-
-	router.InitRouter(postHandler)
-
-	router.Start("0.0.0.0:8080")
 }
