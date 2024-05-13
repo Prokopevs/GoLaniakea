@@ -11,8 +11,8 @@ func (h *HTTP) setRoutes(r *gin.Engine) {
 		api.DELETE("/deletePost/:id", h.DeletePostById)
 		api.PATCH("/updatePost/:id", h.UpdatePost)
 
-		api.GET("/getPost/:id", h.GetPostById)
 		api.GET("/getPosts", h.GetPosts)
+		api.GET("/getPost/:id", h.GetPostById)
 		api.GET("/getTotalCount", h.GetTotalCount)
 		api.GET("/getInteresting", h.GetInteresting)
 	}

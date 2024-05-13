@@ -1,23 +1,25 @@
-FROM golang:1.21-alpine AS builder
+FROM golang:1.22.2 as builder
 
 WORKDIR /app
 
-RUN apk --no-cache add bash git make gcc gettext musl-dev
-
-# dependencies
 COPY ["go.mod", "go.sum", "./"]
 RUN go mod download
 
-# build
-COPY . .
-RUN go build -o ./bin/main cmd/main.go
+COPY cmd cmd
+COPY internal internal
+COPY docs docs
 
-FROM alpine
+COPY Makefile .
+
+RUN make build
+
+FROM debian:stable
 
 WORKDIR /app
- 
-COPY --from=builder /app/bin/main /
+USER nobody
 
-COPY --from=builder /app/.env .env
+COPY --from=builder /app/server /app/server
 
-CMD ["/main"]
+EXPOSE 8000
+
+ENTRYPOINT ["/app/server"]

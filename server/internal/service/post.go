@@ -15,6 +15,11 @@ func (s *ServiceImpl) CreatePost(ctx context.Context, post *model.Post) (int, er
 }
 
 func (s *ServiceImpl) GetPosts(ctx context.Context, category, page, limit int) ([]*model.Post, error) {
+	if page == -1 || limit == -1 {
+		page = 0
+		limit = 3
+	}
+
 	r, err := s.db.GetPosts(ctx, category, page, limit)
 	if err != nil {
 		return nil, err

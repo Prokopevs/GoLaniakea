@@ -6,7 +6,6 @@ import (
 	"github/Prokopevs/GoLaniakea/db"
 	"github/Prokopevs/GoLaniakea/internal/service"
 	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
-	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/router"
 	"os"
 	"os/signal"
 	"sync"
@@ -36,7 +35,7 @@ func run() error {
 	defer logger.Sync()
 	sugaredLogger := logger.Sugar()
 
-	httpServer := handler.NewHTTP(cfg.httpAddr, sugaredLogger, postSvc)
+	httpServer := handler.NewHTTP(cfg.httpAddr, cfg.password, sugaredLogger, postSvc)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	wg := &sync.WaitGroup{}

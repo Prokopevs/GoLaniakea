@@ -29,11 +29,6 @@ func (r *database) GetPosts(ctx context.Context, category, page, limit int) ([]*
 	)
 	posts := []*model.Post{}
 
-	if page == -1 || limit == -1 {
-		page = 0
-		limit = 3
-	}
-
 	if category == -1 {
 		err := r.db.SelectContext(ctx, &posts, qWithoutCategory, page, limit)
 		if err != nil {

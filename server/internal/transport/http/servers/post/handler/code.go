@@ -10,4 +10,5 @@ const (
 	codeNoParam Code = "NO_PARAM"
 	codeInvalidConvertion Code = "INVALID_CONVERSION"
 	codeInvalidPostId Code = "INVALID_POST_ID"
+	codeHeaderErr Code = "HEADER_ERR"
 )

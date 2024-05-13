@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"strconv"
 )
 
 const (
@@ -47,5 +48,42 @@ func (p *PostJSON) validate() (Code, error) {
 		return codeTextCannotBeEmpty, fmt.Errorf("text cannot be empty")
 	}
 
-	return CodeOK, nil
+	return codeOK, nil
+}
+
+func updateGetParams(category, page, limit string) (int, int, int, error) {
+	var categoryInt int
+	var pageInt int
+	var limitInt int
+
+	var err error
+	
+	if category == "" {
+		categoryInt = -1
+	} else {
+		categoryInt, err = strconv.Atoi(category)
+		if err != nil {
+			return 0, 0, 0, fmt.Errorf("category: %w", err.Error())
+		}
+	}
+
+	if page == "" {
+		pageInt = -1
+	} else {
+		pageInt, err = strconv.Atoi(page)
+		if err != nil {
+			return 0, 0, 0, fmt.Errorf("page: %w", err.Error())
+		}
+	}
+
+	if limit == "" {
+		limitInt = -1
+	} else {
+		limitInt, err = strconv.Atoi(limit)
+		if err != nil {
+			return 0, 0, 0, fmt.Errorf("limit: %w", err.Error())
+		}
+	}
+	
+	return categoryInt, pageInt, limitInt, nil
 }
