@@ -42,7 +42,7 @@ func (h *HTTP) CreatePostResponse(c *gin.Context) response {
 		return getBadRequestWithMsgResponse(codeBadBody, err.Error())
 	}
 
-	code, err := p.validate()
+	code, err := p.validate("create")
 	if err != nil {
 		return getBadRequestWithMsgResponse(code, err.Error())
 	}
@@ -115,7 +115,7 @@ func (h *HTTP) UpdatePostResponse(c *gin.Context) response {
 		return getBadRequestWithMsgResponse(codeBadBody, err.Error())
 	}
 
-	code, err := p.validate()
+	code, err := p.validate("update")
 	if err != nil {
 		return getBadRequestWithMsgResponse(code, err.Error())
 	}

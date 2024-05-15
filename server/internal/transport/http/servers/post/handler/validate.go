@@ -16,9 +16,11 @@ const (
 	codeTextCannotBeEmpty = "TEXT_CANNOT_BE_EMPTY"
 )
 
-func (p *PostJSON) validate() (Code, error) {
-	if p.Id == 0 {
-		return codeContentEmpty, fmt.Errorf("id cannot be zero")
+func (p *PostJSON) validate(endpoint string) (Code, error) {
+	if endpoint == "update" {
+		if p.Id == 0 {
+			return codeContentEmpty, fmt.Errorf("id cannot be zero")
+		}
 	}
 	if p.ImageUrl == "" {
 		return codeContentEmpty, fmt.Errorf("imageUrl cannot be empty")
