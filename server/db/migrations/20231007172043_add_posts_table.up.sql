@@ -10,6 +10,4 @@ CREATE TABLE "posts" (
     text varchar NOT NULL
 );
 
--- INSERT INTO posts (imageUrl, name, description, date, category, categoryName, likeCount, liked, text) VALUES ('fdjsk', 'fdhjs', 'jfdskl', '24.09', 1, 'space', 2, false, 'fdjsk');
-
 

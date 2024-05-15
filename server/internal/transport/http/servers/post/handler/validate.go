@@ -17,6 +17,9 @@ const (
 )
 
 func (p *PostJSON) validate() (Code, error) {
+	if p.Id == 0 {
+		return codeContentEmpty, fmt.Errorf("id cannot be zero")
+	}
 	if p.ImageUrl == "" {
 		return codeContentEmpty, fmt.Errorf("imageUrl cannot be empty")
 	}
@@ -32,7 +35,7 @@ func (p *PostJSON) validate() (Code, error) {
 		return codeDateCannotBeEmpty, fmt.Errorf("date cannot be empty")
 	}
 
-	if p.Category == "" {
+	if p.Category == ""  {
 		return codeCategoryCannotBeEmpty, fmt.Errorf("category cannot be empty")
 	}
 

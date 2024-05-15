@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github/Prokopevs/GoLaniakea/db"
-	"github/Prokopevs/GoLaniakea/internal/service"
-	"github/Prokopevs/GoLaniakea/internal/transport/http/servers/post/handler"
+
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 
+	"github.com/Prokopevs/GoLaniakea/server/db"
+	"github.com/Prokopevs/GoLaniakea/server/internal/service"
+	"github.com/Prokopevs/GoLaniakea/server/internal/transport/http/servers/post/handler"
 	"go.uber.org/zap"
 )
 

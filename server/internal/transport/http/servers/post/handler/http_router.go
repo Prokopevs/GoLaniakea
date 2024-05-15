@@ -5,11 +5,11 @@ import (
 )
 
 func (h *HTTP) setRoutes(r *gin.Engine) {
-	api := r.Group("/api/v1/") 
+	api := r.Group("/api/v1") 
 	{
 		api.POST("/create", h.CreatePost)
 		api.DELETE("/deletePost/:id", h.DeletePostById)
-		api.PATCH("/updatePost/:id", h.UpdatePost)
+		api.PATCH("/updatePost", h.UpdatePost)
 
 		api.GET("/getPosts", h.GetPosts)
 		api.GET("/getPost/:id", h.GetPostById)

@@ -3,16 +3,16 @@ package handler
 import (
 	"context"
 	"errors"
-	"github/Prokopevs/GoLaniakea/internal/model"
-	"net/http"
 
+	"net/http"
+	"github.com/Prokopevs/GoLaniakea/server/internal/model"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 type Service interface {
 	CreatePost(ctx context.Context, post *model.Post) (int, error)
-	GetPosts(ctx context.Context, category, page, limit int) ([]*model.Post, error)
+	GetPosts(ctx context.Context, category, page, limit int) ([]*model.RankPost, error)
 	GetPostById(ctx context.Context, id int) (*model.Post, error)
 	IsPostWithIdExist(ctx context.Context, id int) (bool, error)
 	DeletePostById(ctx context.Context, id int) error

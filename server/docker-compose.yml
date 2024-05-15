@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  laniakeaCont:
+    container_name: laniakeaCont
+    image: postgres
+    ports: 
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      PGDATA: /data/postgres
+      restart: unless-stopped
+    volumes:
+       - ./postgres:/data/postgres
+    networks:
+      - lan
+  post-api:
+    image: server/post-api:latest
+    restart: unless-stopped
+    networks:
+      - lan
+    ports:
+      - "5000:5000"
+    depends_on:
+      - laniakeaCont
+    environment:
+      PG_CONN: postgres://${PG_USER}:${PG_PASSWORD}@laniakeaCont:5432/laniakeadb?sslmode=disable   
+      PASSWORD: ${PASSWORD}
+      HTTP_ADDR: :5000
+
+networks:
+  lan:
+    driver: bridge

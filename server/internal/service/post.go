@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
-	"github/Prokopevs/GoLaniakea/internal/model"
+
+
+	"github.com/Prokopevs/GoLaniakea/server/internal/model"
 )
 
 func (s *ServiceImpl) CreatePost(ctx context.Context, post *model.Post) (int, error) {
@@ -14,9 +16,11 @@ func (s *ServiceImpl) CreatePost(ctx context.Context, post *model.Post) (int, er
 	return id, nil
 }
 
-func (s *ServiceImpl) GetPosts(ctx context.Context, category, page, limit int) ([]*model.Post, error) {
-	if page == -1 || limit == -1 {
+func (s *ServiceImpl) GetPosts(ctx context.Context, category, page, limit int) ([]*model.RankPost, error) {
+	if page == -1  {
 		page = 0
+	}
+	if limit == -1 {
 		limit = 3
 	}
 

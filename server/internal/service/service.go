@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"github/Prokopevs/GoLaniakea/internal/model"
+	"github.com/Prokopevs/GoLaniakea/server/internal/model"
 )
 
 type DB interface {
 	CreatePost(ctx context.Context, post *model.Post) (int, error)
-	GetPosts(ctx context.Context, category, page, limit int) ([]*model.Post, error)
+	GetPosts(ctx context.Context, category, page, limit int) ([]*model.RankPost, error)
 	GetPostById(ctx context.Context, id int) (*model.Post, error)
 	IsPostWithIdExist(ctx context.Context, id int) (bool, error)
 	DeletePostById(ctx context.Context, id int) error

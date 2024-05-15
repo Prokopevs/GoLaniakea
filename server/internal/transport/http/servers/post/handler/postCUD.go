@@ -2,13 +2,15 @@ package handler
 
 import (
 	"errors"
-	"github/Prokopevs/GoLaniakea/internal/service"
+
 	"strconv"
 
+	"github.com/Prokopevs/GoLaniakea/server/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type PostJSON struct {
+	Id           int    `json:"id"`
 	ImageUrl     string `json:"imageUrl"`
 	Name         string `json:"name"`
 	Description  string `json:"description"`

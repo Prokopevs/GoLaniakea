@@ -2,14 +2,15 @@ package handler
 
 import (
 	"errors"
-	"github/Prokopevs/GoLaniakea/internal/service"
+
 	"strconv"
 
+	"github.com/Prokopevs/GoLaniakea/server/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 func (h *HTTP) GetPosts(c *gin.Context) {
-	resp := h.CreatePostResponse(c)
+	resp := h.GetPostsResponse(c)
 
 	resp.writeJSON(c)
 }
@@ -30,7 +31,7 @@ func (h *HTTP) GetPostsResponse(c *gin.Context) response {
 		return getInternalServerErrorResponse(codeInternalServerError, err.Error())
 	}
 
-	return newOKResponse(res)
+	return newOKResponse(convertRankPostsToPosts(res))
 }
 
 func (h *HTTP) GetPostById(c *gin.Context) {
@@ -47,7 +48,7 @@ func (h *HTTP) GetPostByIdResponse(c *gin.Context) response {
 
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		return getBadRequestWithMsgResponse(codeInvalidConvertion, err.Error())
+		return getBadRequestWithMsgResponse(codeInvalidConvertion, "invalid param")
 	}
 
 	res, err := h.service.GetPostById(c.Request.Context(), idInt)
@@ -92,5 +93,5 @@ func (h *HTTP) GetInterestingResponse(c *gin.Context) response {
 		return getInternalServerErrorResponse(codeInternalServerError, err.Error())
 	}
 
-	return newOKResponse(res)
+	return newOKResponse(convertPostsToInteresting(res))
 }
