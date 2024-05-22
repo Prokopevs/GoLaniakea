@@ -4,8 +4,6 @@ services:
   laniakeaCont:
     container_name: laniakeaCont
     image: postgres
-    ports: 
-      - "5433:5432"
     environment:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASSWORD}
