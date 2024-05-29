@@ -1,5 +1,5 @@
 1) make build_image
-2) sudo PG_USER=postgres PG_PASSWORD=postgres PASSWORD= docker-compose up
+2) sudo PG_USER=postgres PG_PASSWORD=postgres PASSWORD=HELLO docker compose up
 
 
 0) PG_CONN=postgres://postgres:postgres@localhost:5433/laniakeadb?sslmode=disable HTTP_ADDR=:3333 PASSWORD=PASSWORD GIN_MODE=release ./server
