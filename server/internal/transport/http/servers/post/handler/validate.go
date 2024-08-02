@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	codeImageUrlCannotBeEmpty    = "IMAGE_URL_CANNOT_BE_EMPTY"
-	codeNameCannotBeEmpty        = "NAME_CANNOT_BE_EMPTY"
-	codeDescriptionCannotBeEmpty = "DESCRIPTION_CANNOT_BE_EMPTY"
-	codeDateCannotBeEmpty        = "DATE_CANNOT_BE_EMPTY"
-	codeCategoryCannotBeEmpty    = "CATEGORY_CANNOT_BE_EMPTY"
+	codeImageUrlCannotBeEmpty     = "IMAGE_URL_CANNOT_BE_EMPTY"
+	codeNameCannotBeEmpty         = "NAME_CANNOT_BE_EMPTY"
+	codeDescriptionCannotBeEmpty  = "DESCRIPTION_CANNOT_BE_EMPTY"
+	codeDateCannotBeEmpty         = "DATE_CANNOT_BE_EMPTY"
+	codeCategoryCannotBeEmpty     = "CATEGORY_CANNOT_BE_EMPTY"
 	codeCategoryNameCannotBeEmpty = "CATEGORY_NAME_CANNOT_BE_EMPTY"
-	codeLikeCountCannotBeEmpty = "LIKE_COUNT_CANNOT_BE_EMPTY"
-	codeTextCannotBeEmpty = "TEXT_CANNOT_BE_EMPTY"
+	codeLikeCountCannotBeEmpty    = "LIKE_COUNT_CANNOT_BE_EMPTY"
+	codeTextCannotBeEmpty         = "TEXT_CANNOT_BE_EMPTY"
 )
 
 func (p *PostJSON) validate(endpoint string) (Code, error) {
@@ -37,7 +37,7 @@ func (p *PostJSON) validate(endpoint string) (Code, error) {
 		return codeDateCannotBeEmpty, fmt.Errorf("date cannot be empty")
 	}
 
-	if p.Category == ""  {
+	if p.Category == "" {
 		return codeCategoryCannotBeEmpty, fmt.Errorf("category cannot be empty")
 	}
 
@@ -62,7 +62,7 @@ func updateGetParams(category, page, limit string) (int, int, int, error) {
 	var limitInt int
 
 	var err error
-	
+
 	if category == "" {
 		categoryInt = -1
 	} else {
@@ -89,6 +89,6 @@ func updateGetParams(category, page, limit string) (int, int, int, error) {
 			return 0, 0, 0, fmt.Errorf("limit: %w", err.Error())
 		}
 	}
-	
+
 	return categoryInt, pageInt, limitInt, nil
 }

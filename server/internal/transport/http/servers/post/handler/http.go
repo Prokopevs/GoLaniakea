@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 	"errors"
-
 	"net/http"
+
 	"github.com/Prokopevs/GoLaniakea/server/internal/model"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -24,8 +24,8 @@ type Service interface {
 type HTTP struct {
 	innerServer *http.Server
 
-	log     *zap.SugaredLogger
-	service Service
+	log      *zap.SugaredLogger
+	service  Service
 	password string
 }
 
@@ -51,8 +51,8 @@ func (h *HTTP) Run(ctx context.Context) {
 
 func NewHTTP(addr string, password string, logger *zap.SugaredLogger, postSvc Service) *HTTP {
 	h := &HTTP{
-		log:     logger,
-		service: postSvc,
+		log:      logger,
+		service:  postSvc,
 		password: password,
 	}
 

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-
 	"strconv"
 
 	"github.com/Prokopevs/GoLaniakea/server/internal/service"

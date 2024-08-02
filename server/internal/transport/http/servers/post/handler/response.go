@@ -15,8 +15,9 @@ func (a *addResponse) writeJSON(c *gin.Context) {
 }
 
 type OKStruct struct {
-	jsonData    interface{}
+	jsonData interface{}
 }
+
 func newOKResponse(data interface{}) *OKStruct {
 	return &OKStruct{
 		jsonData: data,
@@ -26,4 +27,3 @@ func newOKResponse(data interface{}) *OKStruct {
 func (p *OKStruct) writeJSON(c *gin.Context) {
 	c.JSON(http.StatusOK, p.jsonData)
 }
-

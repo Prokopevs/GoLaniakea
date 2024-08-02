@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/Prokopevs/GoLaniakea/server/internal/model"
 )
 

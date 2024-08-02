@@ -21,31 +21,31 @@ func (r *database) CreatePost(ctx context.Context, post *model.Post) (int, error
 }
 
 func (r *database) GetPosts(ctx context.Context, category, page, limit int) ([]*model.RankPost, error) {
-    const (
-        qWithoutCategory = "SELECT * FROM (SELECT *, RANK() OVER (ORDER BY id) AS r FROM posts) AS ranked_posts WHERE r > $1 AND r <= $2"
-        qWithCategory    = "SELECT * FROM (SELECT *, RANK() OVER (ORDER BY id) AS r FROM posts WHERE category = $1) AS ranked_posts WHERE r > $2 AND r <= $3"
-    )
-    posts := []*model.RankPost{}
+	const (
+		qWithoutCategory = "SELECT * FROM (SELECT *, RANK() OVER (ORDER BY id) AS r FROM posts) AS ranked_posts WHERE r > $1 AND r <= $2"
+		qWithCategory    = "SELECT * FROM (SELECT *, RANK() OVER (ORDER BY id) AS r FROM posts WHERE category = $1) AS ranked_posts WHERE r > $2 AND r <= $3"
+	)
+	posts := []*model.RankPost{}
 
-    if category == -1 {
-        startRank := (page - 1) * limit
-        endRank := startRank + limit
+	if category == -1 {
+		startRank := (page - 1) * limit
+		endRank := startRank + limit
 
-        err := r.db.SelectContext(ctx, &posts, qWithoutCategory, startRank, endRank)
-        if err != nil {
-            return nil, err
-        }
-    } else {
-        startRank := (page - 1) * limit
-        endRank := startRank + limit
+		err := r.db.SelectContext(ctx, &posts, qWithoutCategory, startRank, endRank)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		startRank := (page - 1) * limit
+		endRank := startRank + limit
 
-        err := r.db.SelectContext(ctx, &posts, qWithCategory, category, startRank, endRank)
-        if err != nil {
-            return nil, err
-        }
-    }
+		err := r.db.SelectContext(ctx, &posts, qWithCategory, category, startRank, endRank)
+		if err != nil {
+			return nil, err
+		}
+	}
 
-    return posts, nil
+	return posts, nil
 }
 
 func (r *database) GetPostById(ctx context.Context, id int) (*model.Post, error) {
@@ -91,29 +91,26 @@ func (r *database) UpdatePost(ctx context.Context, post *model.Post) error {
 
 func (r *database) GetTotalCount(ctx context.Context) ([]*model.Total, error) {
 	const totalCountQ = "SELECT category AS id, COUNT(*) AS totalCount FROM posts GROUP BY category ORDER BY category;"
-		
+
 	total := []*model.Total{}
 
 	err := r.db.SelectContext(ctx, &total, totalCountQ)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return total, nil
 }
 
 func (r *database) GetInteresting(ctx context.Context) ([]*model.Post, error) {
 	const interestingQ = "SELECT id, name, date FROM posts;"
-		
+
 	posts := []*model.Post{}
 
 	err := r.db.SelectContext(ctx, &posts, interestingQ)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return posts, nil
 }
-
-
-
