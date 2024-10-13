@@ -1,7 +1,14 @@
-1) make build_image
-2) sudo PG_USER=postgres PG_PASSWORD=postgres PASSWORD=HELLO docker compose up
+1. make build_image
+2. sudo PG_USER=postgres  docker compose up
+3. docker exec -it laniakeaCont psql -U postgres
+4. create database laniakeadb;
+5. \q
 
-0) PG_CONN=postgres://postgres:postgres@localhost:5433/laniakeadb?sslmode=disable HTTP_ADDR=:3333 PASSWORD=PASSWORD GIN_MODE=release ./server
+6. start migration
+7. to find 192.168.48.2 input command: "docker inspect laniakeaCont" and find field "IPAddress"
+8. make migrateup
+
+9. PG_CONN=postgres://postgres:postgres@localhost:5433/laniakeadb?sslmode=disable HTTP_ADDR=:5000 PASSWORD=PASSWORD GIN_MODE=release ./server
 
 golangci-lint run --config=golangci.toml
 golangci-lint run --fix --config=golangci.toml

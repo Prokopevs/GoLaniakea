@@ -8,6 +8,7 @@ RUN go mod download
 COPY cmd cmd
 COPY internal internal
 COPY db db
+COPY metrics metrics
 
 COPY Makefile .
 

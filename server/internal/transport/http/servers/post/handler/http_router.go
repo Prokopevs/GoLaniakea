@@ -2,6 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/Prokopevs/GoLaniakea/server/metrics"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -22,7 +24,9 @@ func CORSMiddleware() gin.HandlerFunc {
 
 func (h *HTTP) setRoutes(r *gin.Engine) {
 	r.Use(CORSMiddleware())
-
+	r.Use(metrics.TrackMetrics())
+	
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 	api := r.Group("/api/v1")
 	{
 		api.POST("/create", h.CreatePost)
